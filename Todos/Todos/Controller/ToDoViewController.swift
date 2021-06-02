@@ -6,16 +6,25 @@
 //
 
 import UIKit
+import CoreData
 
 class ToDoViewController: UITableViewController {
 
+    @IBOutlet weak var searchBar: UISearchBar!
     var tods = [Item]()
+    var selectedCategory : Category?{
+        didSet{
+            loadItems()
+        }
+    }
+
     let datafilepath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("minna.plist")
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadItems()
+       // loadItems()
         // Do any additional setup after loading the view.
     }
  
@@ -49,9 +58,10 @@ class ToDoViewController: UITableViewController {
         let atert =  UIAlertController.init(title: "Add new ToDo", message: "", preferredStyle:.alert)
         
         let action = UIAlertAction.init(title: "Add", style: .default) { (action) in
-            
-            let newItem = Item()
+            let newItem = Item(context: self.context)
             newItem.title = textFiels.text!
+            newItem.done = false
+            newItem.parentCategory = self.selectedCategory
             self.tods.append(newItem)
             self.saveItems()
 //            DispatchQueue.main.async {
@@ -71,32 +81,63 @@ class ToDoViewController: UITableViewController {
         present(atert, animated: true, completion: nil)
         
     }
-    //MARK: modell manupulation functions
+    //MARK: model manupulation functions
     func saveItems(){
-        let encoder = PropertyListEncoder()
         do{
-        
-        let data = try encoder.encode(self.tods)
-        
-            try data.write(to: self.datafilepath!)
+           try context.save()
         }catch{
             print("erro \(error)")
         }
-        
     }
-    func loadItems() {
+    
+    func loadItems(with request:NSFetchRequest<Item> = Item.fetchRequest(), and predicat:NSPredicate? = nil) {
         
-        if let data = try? Data(contentsOf: datafilepath!){
+        let categoryPredicate = NSPredicate.init(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+        if let predicat = predicat{
+            let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate,predicat])
             
-            let decoder = PropertyListDecoder()
-            do{
-               tods = try decoder.decode([Item].self, from: data)
-            }catch{
-                print("eroor while decoding\(error)")
-            }
-            
+            request.predicate = compoundPredicate
+        }else{
+            request.predicate = categoryPredicate
         }
+        
+        
+        
+        
+        
+        do {
+           tods = try context.fetch(request)
+        } catch {
+            print("Error loading items\(error)")
+        }
+        tableView.reloadData()
+
     }
     
 }
 
+extension ToDoViewController: UISearchBarDelegate
+{
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let search = searchBar.text {
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+            let predicate = NSPredicate(format: "title CONTAINS[cd] %@", search)
+        let sort = NSSortDescriptor(key: "title", ascending: true)
+            
+            request.sortDescriptors = [sort]
+           loadItems(with: request, and: predicate)
+    
+        
+        }
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.count == 0{
+            //refressh the table
+            loadItems()
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+        }
+    }
+}

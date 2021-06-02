@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF499AE92667150900FA1F4A /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF499AE82667150900FA1F4A /* CategoryViewController.swift */; };
 		BFB2C0E326412F150080AC33 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB2C0E226412F150080AC33 /* AppDelegate.swift */; };
 		BFB2C0E526412F150080AC33 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB2C0E426412F150080AC33 /* SceneDelegate.swift */; };
 		BFB2C0E726412F150080AC33 /* ToDoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB2C0E626412F150080AC33 /* ToDoViewController.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BF499AE82667150900FA1F4A /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		BFB2C0DF26412F150080AC33 /* Todos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFB2C0E226412F150080AC33 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BFB2C0E426412F150080AC33 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				BFB2C0E626412F150080AC33 /* ToDoViewController.swift */,
+				BF499AE82667150900FA1F4A /* CategoryViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -164,6 +167,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF499AE92667150900FA1F4A /* CategoryViewController.swift in Sources */,
 				BFB2C0E726412F150080AC33 /* ToDoViewController.swift in Sources */,
 				BFB2C0E326412F150080AC33 /* AppDelegate.swift in Sources */,
 				BFB2C0E526412F150080AC33 /* SceneDelegate.swift in Sources */,
